@@ -1,5 +1,6 @@
 "use client";
 
+import { clsx } from "clsx";
 import { useEffect } from "react";
 import styles from "./GridOverlay.module.css";
 
@@ -43,7 +44,7 @@ export function GridOverlay() {
   }, []);
 
   return (
-    <div className={`container ${styles.overlay}`} aria-hidden="true">
+    <div className={clsx("container", styles.overlay)} aria-hidden="true">
       {Array.from({ length: MAX_COLUMNS }, (_, i) => (
         <div key={i} className={styles.column} />
       ))}

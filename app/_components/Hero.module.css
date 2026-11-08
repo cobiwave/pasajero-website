@@ -53,13 +53,51 @@
 }
 
 .name {
-	grid-column: 1 / -1;
+	grid-column: 1 / -2;
 	grid-row: 1;
+	align-self: center;
 	font-family: var(--font-stretch-pro), var(--font-sans);
 	font-size: var(--fs-lead);
 	/* Stretch Pro is already extended; extra tracking makes it fall apart. */
 	letter-spacing: 0.02em;
 	text-transform: uppercase;
+}
+
+/* Top-right, vertically centered on the wordmark. Sized off --fs-lead so it
+   scales with PASAJERO at every breakpoint. */
+.socials {
+	grid-column: -2 / -1;
+	grid-row: 1;
+	align-self: center;
+	justify-self: end;
+	display: flex;
+	/* Equal to 2× the link padding, so the enlarged hit areas don't overlap. */
+	gap: 2rem;
+}
+
+.social {
+	display: grid;
+	/* Padding grows the hit area to ~44px; the negative margin cancels it out
+	   so the icon still sits flush with the grid edge. */
+	padding: 1rem;
+	margin: -1rem;
+	font-size: var(--fs-lead);
+	color: inherit;
+	transition: opacity 0.2s ease;
+
+	& svg {
+		width: 1em;
+		height: 1em;
+	}
+
+	&:hover {
+		opacity: 0.7;
+	}
+
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
 }
 
 .title {

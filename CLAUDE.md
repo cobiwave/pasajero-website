@@ -32,7 +32,7 @@ This is a single-page portfolio site ("PASAJERO STUDIO") built on the App Router
 
 ### Grid system
 
-- `.container` is the page-level 4/8/12-column grid. Every page block (for example `Hero`) is a `.container` and combines it with its module class: `` className={`container ${styles.hero}`} ``.
+- `.container` is the page-level 4/8/12-column grid. Every page block (for example `Hero`) is a `.container` and combines it with its module class using `clsx`: `className={clsx("container", styles.hero)}`. Use `clsx` (not template strings) whenever an element has more than one class or conditional classes.
 - `.subgrid` is a nested group that inherits the parent's column tracks (`grid-template-columns: subgrid`) and spans the full width by default.
 - Both global classes are wrapped in `:where()`, which gives them zero specificity, so any CSS Module rule overrides them regardless of stylesheet order.
 - Row subgrids (`grid-template-rows: subgrid`) are applied per component and need an explicit `grid-row: span N`. Without it, the children collapse onto a single row track and overlap.
