@@ -42,6 +42,17 @@ This is a single-page portfolio site ("PASAJERO STUDIO") built on the App Router
 
 `app/_components/GridOverlay.tsx` is loaded in `app/layout.tsx` through `next/dynamic` only when `NODE_ENV === "development"`, so it is stripped from production bundles. Press **`g`** in the browser to toggle it. Its state is stored as a `data-grid-overlay` attribute on `<html>` and persisted in localStorage. The overlay renders a real `.container`, so it always matches the grid tokens. If the breakpoints or column counts change, update the `nth-child` rules and labels in `GridOverlay.module.css` too.
 
+### Motion (GSAP)
+
+Animations use `gsap` and `@gsap/react`. All GSAP access goes through `app/_lib/motion.ts`, which registers `useGSAP`, `ScrollTrigger` and `SplitText` once and re-exports `gsap`. Import from there, not from `gsap` directly. GSAP skills are installed under `.agents/skills/` (locked in `skills-lock.json`), so load the matching `gsap-*` skill before writing animation code.
+
+- **Tokens:** `motion` holds the shared `duration`, `ease`, fade-up distance `y` and `stagger.words` / `stagger.items`. Use them so every section moves the same way.
+- **`useMotion(scopeRef, { full, reduced? })`** wraps `useGSAP` and `gsap.matchMedia()`. `full` runs under `prefers-reduced-motion: no-preference`, and the optional `reduced` runs under `reduce`. Tweens are reverted on unmount and whenever the OS setting changes. Components that call it must be `"use client"`.
+- **`revealTimeline(trigger?)`** returns a timeline with the shared defaults. With a `trigger`, it plays once when the trigger reaches `top 75%` of the viewport. Without one it plays immediately, as in `Hero`.
+- **`splitWords(el)`** applies `SplitText` with masked words for a "rise from below" reveal (animate `split.words` with `yPercent: 100`). The masks get the global `.split-word-mask` class from `globals.css`, which pads them so glyph overhangs aren't clipped.
+- **`childrenOf(el)`** returns an element's children as an array, for staggering list items.
+- **Flash prevention:** put `data-reveal` on the scope element. `globals.css` hides `[data-reveal]` with `visibility: hidden`, and `useMotion` reveals the scope (`autoAlpha: 1`) after the `from()` tweens have set their start state. A `<noscript>` style in `app/layout.tsx` keeps these sections visible when JS is off.
+
 ### Fonts
 
 Neue Haas Display is self-hosted with `next/font/local` in `app/fonts/neue-haas-display.ts` and exposed as `--font-neue-haas-display` on `<html>`, which feeds `--font-sans`. The weights in the `.ttf` files are shifted, so they are remapped to standard CSS weights: Roman = 400, Medium = 500, and Thin sits at 250.
