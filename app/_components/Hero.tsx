@@ -1,19 +1,65 @@
+"use client";
+
+import { useRef } from "react";
 import { clsx } from "clsx";
 import { stretchPro } from "@/app/fonts/stretch-pro";
+import {
+	childrenOf,
+	motion,
+	revealTimeline,
+	splitWords,
+	useMotion,
+} from "@/app/_lib/motion";
 import styles from "./Hero.module.css";
 import { HeroVideo } from "./HeroVideo";
 
 export function Hero() {
+	const containerRef = useRef<HTMLElement>(null);
+	const nameRef = useRef<HTMLParagraphElement>(null);
+	const titleRef = useRef<HTMLHeadingElement>(null);
+	const introRef = useRef<HTMLParagraphElement>(null);
+	const socialsRef = useRef<HTMLUListElement>(null);
+
+	useMotion(containerRef, {
+		full: () => {
+			const split = splitWords(titleRef.current);
+
+			revealTimeline()
+				.from([nameRef.current, childrenOf(socialsRef.current)], {
+					autoAlpha: 0,
+					y: 16,
+					stagger: motion.stagger.words,
+				})
+				.from(
+					split.words,
+					{ yPercent: 100, stagger: motion.stagger.words },
+					"<0.2",
+				)
+				.from(introRef.current, { autoAlpha: 0, y: motion.y }, "<0.5");
+		},
+	});
+
 	return (
-		<section className={styles.hero} aria-labelledby="hero-title">
+		<section
+			data-reveal
+			ref={containerRef}
+			className={styles.hero}
+			aria-labelledby="hero-title"
+		>
 			<HeroVideo className={styles.video} />
 
 			{/* Full-bleed media lives on the section; the grid lives inside. */}
 			<div className={clsx("container", styles.content)}>
-				<p className={clsx(stretchPro.variable, styles.name)}>PASAJERO</p>
+				<p ref={nameRef} className={clsx(stretchPro.variable, styles.name)}>
+					PASAJERO
+				</p>
 
 				{/* External links: plain <a>, since next/link is for internal routes. */}
-				<ul className={styles.socials} aria-label="PASAJERO on social media">
+				<ul
+					ref={socialsRef}
+					className={styles.socials}
+					aria-label="PASAJERO on social media"
+				>
 					<li>
 						<a
 							className={styles.social}
@@ -61,11 +107,11 @@ export function Hero() {
 					</li>
 				</ul>
 
-				<h1 id="hero-title" className={styles.title}>
+				<h1 ref={titleRef} id="hero-title" className={styles.title}>
 					The portal of ephemeral eternity.
 				</h1>
 
-				<p className={styles.intro}>
+				<p ref={introRef} className={styles.intro}>
 					An independent space for photography, film and conversation. Original
 					works and interviews with the people, places and subcultures that live
 					between the fleeting and the timeless.
