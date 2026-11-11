@@ -19,6 +19,15 @@ Use pnpm (pinned via `packageManager`):
 
 There is no test framework yet.
 
+## Commits
+
+Commit messages must follow [Conventional Commits](https://www.conventionalcommits.org): `type(scope)?: subject`, e.g. `feat(hero): add social links`. Allowed types come from `@commitlint/config-conventional`: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore` and `revert`.
+
+- A `commit-msg` hook runs `commitlint` (configured in `commitlint.config.mjs`) and rejects non-conforming messages. Don't bypass it with `--no-verify`. Fix the message instead.
+- `simple-git-hooks` installs the hook through the `prepare` script on `pnpm install`. The hook command lives in the `simple-git-hooks` field of `package.json`. After changing it, run `pnpm exec simple-git-hooks` to reinstall.
+- pnpm warns that `simple-git-hooks` build scripts were ignored. This is expected. Don't run `pnpm approve-builds`.
+- To check a message without committing: `echo "feat: subject" | pnpm exec commitlint`.
+
 ## Architecture
 
 This is a single-page portfolio site ("PASAJERO STUDIO") built on the App Router in `app/`. Styling is plain CSS: global tokens in `app/globals.css`, plus CSS Modules per component in `app/_components/`. There is no Tailwind. The `@/*` path alias maps to the repo root.
