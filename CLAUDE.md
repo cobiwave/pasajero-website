@@ -58,7 +58,7 @@ Animations use `gsap` and `@gsap/react`. All GSAP access goes through `app/_lib/
 - **Tokens:** `motion` holds the shared `duration`, `ease`, fade-up distance `y` and `stagger.words` / `stagger.items`. Use them so every section moves the same way.
 - **`useMotion(scopeRef, { full, reduced? })`** wraps `useGSAP` and `gsap.matchMedia()`. `full` runs under `prefers-reduced-motion: no-preference`, and the optional `reduced` runs under `reduce`. Tweens are reverted on unmount and whenever the OS setting changes. Components that call it must be `"use client"`.
 - **`revealTimeline(trigger?)`** returns a timeline with the shared defaults. With a `trigger`, it plays once when the trigger reaches `top 75%` of the viewport. Without one it plays immediately, as in `Hero`.
-- **`splitWords(el)`** applies `SplitText` with masked words for a "rise from below" reveal (animate `split.words` with `yPercent: 100`). The masks get the global `.split-word-mask` class from `globals.css`, which pads them so glyph overhangs aren't clipped.
+- **`splitWords(el)`** applies `SplitText` with masked words for a "rise from below" reveal (animate `split.words` with `yPercent: motion.maskOffset`). The masks get the global `.split-word-mask` class from `globals.css`, which pads them so glyph overhangs aren't clipped.
 - **`childrenOf(el)`** returns an element's children as an array, for staggering list items.
 - **Flash prevention:** put `data-reveal` on the scope element. `globals.css` hides `[data-reveal]` with `visibility: hidden`, and `useMotion` reveals the scope (`autoAlpha: 1`) after the `from()` tweens have set their start state. A `<noscript>` style in `app/layout.tsx` keeps these sections visible when JS is off.
 
